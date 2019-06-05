@@ -1,0 +1,45 @@
+@import '../node_modules/nes.css/css/nes-core.min.css';
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap');
+
+body {
+  overflow-y: scroll;
+  font-family: 'Press Start 2P', cursive;
+}
+
+.grid {
+  margin: .5rem;
+  display: grid;
+  grid-template: auto / 1fr .5fr .5fr;
+  grid-gap: 1rem;
+}
+
+canvas {
+  border: 2px solid black;
+  background: radial-gradient(circle, red,orange,yellow,green,blue,indigo,violet);
+}
+
+select {
+  border: 2px solid black;
+  width: 100%;
+  height: 100%;
+  padding: .5rem;
+}
+
+button {
+  display: block;
+  margin-bottom: .5rem;
+  width: 100%;
+  height: 2rem;
+  padding: 0 1rem 0 1rem;
+  background-color: rgba(0, 0, 0, 0);
+  border: 2px solid black;
+  transition: .2s background-color;
+  cursor: pointer;
+  text-transform: uppercase;
+  outline: none;
+  user-select: none;
+  
+  &:hover {
+    background-color: rgba(242, 121, 53, 1);
+  }
+}
