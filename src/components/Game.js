@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import * as firebase from "firebase/app";
+import "firebase/firebase-firestore";
+import { firebase_config } from "../firebase-config";
 import Canvas from "../components/Canvas";
 import Vector from "../util/Vector";
 import useInterval from "../hooks/use-interval";
@@ -8,12 +11,32 @@ const alive = 1;
 const fps = 0.25;
 const delay = fps * 1000;
 
+firebase.initializeApp(firebase_config);
+const db = firebase.firestore();
+let dbStates = db.collection("states");
+
 export default function Game(props) {
   const [board, updateBoard] = useState(
     Array.from(Array(18), _ => Array(40).fill(0))
   );
   const [play, updatePlay] = useState(false);
+  const [saves, updateSaves] = useState([]);
+  const savesList = useRef(null);
   const gameSize = Vector(board[0].length, board.length);
+
+  useEffect(() => {
+    const fetchSaves = () => {
+      dbStates
+        .get()
+        .then(function(saves) {
+          updateSaves(saves.docs.map(docRef => docRef.id));
+        })
+        .catch(function(error) {
+          console.error("Error retriving saves: ", error);
+        });
+    };
+    fetchSaves();
+  }, []);
 
   useInterval(
     () => {
@@ -27,6 +50,38 @@ export default function Game(props) {
   }
   function handleClickClear() {
     updateBoard(Array.from(Array(gameSize.y), _ => Array(gameSize.x).fill(0)));
+  }
+  function handleClickSave() {
+    dbStates
+      .add({
+        state: board.map(row => row.join(""))
+      })
+      .then(function(docRef) {
+        updateSaves([docRef.id, ...saves]);
+      })
+      .catch(function(error) {
+        console.error("Error adding document: ", error);
+      });
+  }
+  function handleClickLoad() {
+    let savesElement = savesList.current;
+    if (savesElement.selectedIndex < 0) return;
+    let id = savesElement.options[savesElement.selectedIndex].value;
+    let docRef = dbStates.doc(id);
+    docRef
+      .get()
+      .then(function(doc) {
+        if (doc.exists) {
+          updateBoard(
+            doc.data().state.map(row => row.split("").map(x => Number(x)))
+          );
+        } else {
+          console.log("No such document!");
+        }
+      })
+      .catch(function(error) {
+        console.log("Error getting document:", error);
+      });
   }
   function getCellState(position) {
     return board[position.y][position.x];
@@ -91,6 +146,19 @@ export default function Game(props) {
         <button onClick={handleClickClear}>
           <span>Clear</span>
         </button>
+        <button onClick={handleClickSave}>
+          <span>Save</span>
+        </button>
+        <button onClick={handleClickLoad}>
+          <span>Load</span>
+        </button>
+      </div>
+      <div className="saves-container">
+        <select name="saves" ref={savesList} size="5">
+          {saves.map((saveId, i) => (
+            <option key={i} value={saveId}>{`State ${i + 1}`}</option>
+          ))}
+        </select>
       </div>
     </div>
   );
