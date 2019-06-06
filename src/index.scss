@@ -34,16 +34,17 @@ select {
   padding: 0.5rem;
 
   & option {
-    margin-bottom: 2px;
+    margin-bottom: .25em;
     &:hover {
       background-color: rgba(242, 121, 53, 1);
     }
 
     &.placeholder {
+      width: 50%;
       border-radius: 60px;
       background: linear-gradient(133deg, lightgrey, #ffffff, lightgrey);
       background-size: 400% 400%;
-      animation: shine .5s ease-in infinite;
+      animation: shine 1s ease-in infinite;
     }
   }
 }

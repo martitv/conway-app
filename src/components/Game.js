@@ -157,11 +157,13 @@ export default function Game(props) {
       </div>
       <div className="saves-container">
         <select name="saves" ref={savesList} size="5">
-          { loading ? Array(5).fill(0).map(() => <option className="placeholder" />) :
-            saves.map((saveId, i) => (
-            <option key={i} value={saveId}>{`State ${i + 1}`}</option>
-          ))
-          }
+          {loading
+            ? Array(5)
+                .fill(0)
+                .map((e, i) => <option key={i} className="placeholder" />)
+            : saves.map((saveId, i) => (
+                <option key={saveId} value={saveId}>{`State ${i + 1}`}</option>
+              ))}
         </select>
       </div>
     </div>
