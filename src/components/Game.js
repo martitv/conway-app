@@ -22,11 +22,13 @@ export default function Game(props) {
   );
   const [play, updatePlay] = useState(false);
   const [saves, updateSaves] = useState([]);
+  const [loading, updateLoading] = useState(false);
   const savesList = useRef(null);
   const gameSize = Vector(board[0].length, board.length);
 
   useEffect(() => {
     const fetchSaves = () => {
+      updateLoading(true);
       dbStates
         .get()
         .then(function(saves) {
@@ -34,6 +36,9 @@ export default function Game(props) {
         })
         .catch(function(error) {
           console.error("Error retriving saves: ", error);
+        })
+        .finally(function() {
+          updateLoading(false);
         });
     };
     fetchSaves();
@@ -152,9 +157,11 @@ export default function Game(props) {
       </div>
       <div className="saves-container">
         <select name="saves" ref={savesList} size="5">
-          {saves.map((saveId, i) => (
+          { loading ? Array(5).fill(0).map(() => <option className="placeholder" />) :
+            saves.map((saveId, i) => (
             <option key={i} value={saveId}>{`State ${i + 1}`}</option>
-          ))}
+          ))
+          }
         </select>
       </div>
     </div>

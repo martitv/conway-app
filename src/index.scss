@@ -33,9 +33,24 @@ select {
   height: 100%;
   padding: 0.5rem;
 
-  & option:hover {
-    background-color: rgba(242, 121, 53, 1);
+  & option {
+    margin-bottom: 2px;
+    &:hover {
+      background-color: rgba(242, 121, 53, 1);
+    }
+
+    &.placeholder {
+      border-radius: 60px;
+      background: linear-gradient(133deg, lightgrey, #ffffff, lightgrey);
+      background-size: 400% 400%;
+      animation: shine .5s ease-in infinite;
+    }
   }
+}
+@keyframes shine { 
+    0%{background-position:0% 34%}
+    50%{background-position:100% 67%}
+    100%{background-position:0% 34%}
 }
 
 button {
