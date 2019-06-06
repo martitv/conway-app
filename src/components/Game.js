@@ -3,6 +3,7 @@ import * as firebase from "firebase/app";
 import "firebase/firebase-firestore";
 import { firebase_config } from "../firebase-config";
 import Canvas from "../components/Canvas";
+import Button from "../components/Button";
 import Vector from "../util/Vector";
 import useInterval from "../hooks/use-interval";
 
@@ -140,18 +141,10 @@ export default function Game(props) {
       <Canvas board={board} setCellState={setCellState} />
 
       <div className="button-container">
-        <button onClick={handleClickPlay}>
-          <span>{play ? "Stop" : "Play"}</span>
-        </button>
-        <button onClick={handleClickClear}>
-          <span>Clear</span>
-        </button>
-        <button onClick={handleClickSave}>
-          <span>Save</span>
-        </button>
-        <button onClick={handleClickLoad}>
-          <span>Load</span>
-        </button>
+        <Button label={play ? "Stop" : "Play"} handleClick={handleClickPlay} />
+        <Button label={"Clear"} handleClick={handleClickClear} />
+        <Button label={"Save"} handleClick={handleClickSave} />
+        <Button label={"Load"} handleClick={handleClickLoad} />
       </div>
       <div className="saves-container">
         <select name="saves" ref={savesList} size="5">
