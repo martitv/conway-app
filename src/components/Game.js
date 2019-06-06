@@ -30,7 +30,7 @@ export default function Game(props) {
       dbStates
         .get()
         .then(function(saves) {
-          updateSaves(saves.docs.map(docRef => docRef.id));
+          updateSaves(saves.docs.map(docRef => docRef.id).reverse());
         })
         .catch(function(error) {
           console.error("Error retriving saves: ", error);
@@ -41,13 +41,13 @@ export default function Game(props) {
 
   useInterval(
     () => {
-      updateBoard(doFrame(board));
+      updateBoard(b => doFrame(b));
     },
     play ? delay : null
   );
 
   function handleClickPlay() {
-    updatePlay(!play);
+    updatePlay(p => !p);
   }
   function handleClickClear() {
     updateBoard(Array.from(Array(gameSize.y), _ => Array(gameSize.x).fill(0)));
@@ -58,7 +58,7 @@ export default function Game(props) {
         state: board.map(row => row.join(""))
       })
       .then(function(docRef) {
-        updateSaves([docRef.id, ...saves]);
+        updateSaves(s => [...s, docRef.id]);
       })
       .catch(function(error) {
         console.error("Error adding document: ", error);
@@ -119,18 +119,22 @@ export default function Game(props) {
   function doFrame(board) {
     return board.map((row, i) =>
       row.map((cell, j) => {
+        let v = Vector(j, i);
         if (cell === alive) {
-          let v = Vector(j, i);
-          if ([2, 3].includes(aliveNeighbours(v, board))) {
-            return alive;
+          switch (aliveNeighbours(v, board)) {
+            case 2:
+            case 3:
+              return alive;
+            default:
+              return dead;
           }
-          return dead;
         } else {
-          let v = Vector(j, i);
-          if (aliveNeighbours(v, board) === 3) {
-            return alive;
+          switch (aliveNeighbours(v, board)) {
+            case 3:
+              return alive;
+            default:
+              return dead;
           }
-          return dead;
         }
       })
     );

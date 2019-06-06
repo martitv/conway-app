@@ -1,43 +1,56 @@
-@import '../node_modules/nes.css/css/nes-core.min.css';
-@import url('https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap');
+@import "../node_modules/nes.css/css/nes-core.min.css";
+@import url("https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap");
 
 body {
   overflow-y: scroll;
-  font-family: 'Press Start 2P', cursive;
+  font-family: "Press Start 2P", cursive;
 }
 
 .grid {
-  margin: .5rem;
+  margin: 0.5rem;
   display: grid;
-  grid-template: auto / 1fr .5fr .5fr;
+  grid-template: auto / 1fr 0.5fr 0.5fr;
   grid-gap: 1rem;
 }
 
 canvas {
   border: 2px solid black;
-  background: radial-gradient(circle, red,orange,yellow,green,blue,indigo,violet);
+  background: radial-gradient(
+    circle,
+    red,
+    orange,
+    yellow,
+    green,
+    blue,
+    indigo,
+    violet
+  );
 }
 
 select {
   border: 2px solid black;
   width: 100%;
   height: 100%;
-  padding: .5rem;
+  padding: 0.5rem;
+
+  & option:hover {
+    background-color: rgba(242, 121, 53, 1);
+  }
 }
 
 button {
   display: block;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
   width: 100%;
   height: 2rem;
   padding: 0 1rem 0 1rem;
   background-color: rgba(0, 0, 0, 0);
   border: 2px solid black;
-  transition: .2s background-color;
+  transition: 0.2s background-color;
   text-transform: uppercase;
   outline: none;
   user-select: none;
-  
+
   &:hover {
     background-color: rgba(242, 121, 53, 1);
   }
